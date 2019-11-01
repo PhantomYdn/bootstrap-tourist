@@ -2868,7 +2868,6 @@ from v0.3.0:
 		// Repositions a currently visible highlight
 		Tour.prototype._positionHighlightOverlay = function (step)
 		{
-
 			// safety check, ensure no other elem has the highlight class
 			var $elemTmp = $(".tour-highlight-element");
 			if($elemTmp.length > 0)
