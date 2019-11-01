@@ -94,3 +94,12 @@
 .popover[class*="tour-"].orphan .arrow {
 	display: none;
 }
+
+
+.behind {
+    z-index: -1;
+}
+
+.zindexFix {
+    z-index: 1029;
+}
