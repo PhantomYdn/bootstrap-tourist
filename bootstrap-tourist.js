@@ -979,6 +979,7 @@ from v0.3.0:
 										backdropOptions:	{
 																highlightOpacity:			0.9,
 																highlightColor:				"#FFF",
+                                                                backdropSibling:            false,
 																animation:	{
 																				// can be string of css class or function signature: function(domElement, step) {}
 																				backdropShow:			function(domElement, step)
@@ -988,7 +989,7 @@ from v0.3.0:
 																				backdropHide:			function(domElement, step)
 																										{
 																											domElement.fadeOut("slow")
-																										},
+																										},                                                                                
 																				highlightShow:			function(domElement, step)
 																										{
 																											// calling step.fnPositionHighlight() is the same as:
@@ -2867,6 +2868,7 @@ from v0.3.0:
 		// Repositions a currently visible highlight
 		Tour.prototype._positionHighlightOverlay = function (step)
 		{
+
 			// safety check, ensure no other elem has the highlight class
 			var $elemTmp = $(".tour-highlight-element");
 			if($elemTmp.length > 0)
@@ -3001,6 +3003,21 @@ from v0.3.0:
 					}
 				}
 			}
+            
+            if (step.backdropOptions.backdropSibling == true) 
+            {
+                $(DOMID_HIGHLIGHT).addClass('behind');
+                $(DOMID_BACKDROP).addClass('zindexFix');
+                $(DOMID_HIGHLIGHT).clone().prop('id', 'tourHighlight-temp').removeClass('behind').css({'opacity': ''}).insertAfter(".tour-highlight-element");
+                $(DOMID_BACKDROP).clone().prop('id', 'tourBackdrop-temp').removeClass('zindexFix').insertAfter(".tour-highlight-element");
+            } 
+            if (step.backdropOptions.backdropSibling == false) 
+            {
+                $(DOMID_HIGHLIGHT).removeClass('behind');
+                $(DOMID_BACKDROP).removeClass('zindexFix');
+                $('#tourBackdrop-temp').remove();
+                $('#tourHighlight-temp').remove();
+            }
         };
 
 		// Updates visibility of the preventInteraction div and any other overlay elements added in future features
