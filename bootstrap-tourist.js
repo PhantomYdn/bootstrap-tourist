@@ -2714,6 +2714,8 @@ from v0.3.0:
 			{
 				$(DOMID_BACKDROP).hide(0);
 				$(DOMID_HIGHLIGHT).hide(0);
+                $("#tourBackdrop-temp").remove();
+                $("#tourHighlight-temp").remove();
 			}
         };
 
@@ -3002,12 +3004,12 @@ from v0.3.0:
 					}
 				}
 			}
-            
+
             if (step.backdropOptions.backdropSibling == true) 
             {
                 $(DOMID_HIGHLIGHT).addClass('behind');
                 $(DOMID_BACKDROP).addClass('zindexFix');
-                $(DOMID_HIGHLIGHT).clone().prop('id', 'tourHighlight-temp').removeClass('behind').css({'opacity': ''}).insertAfter(".tour-highlight-element");
+                $(DOMID_HIGHLIGHT).clone().prop('id', 'tourHighlight-temp').removeClass('behind').insertAfter(".tour-highlight-element");
                 $(DOMID_BACKDROP).clone().prop('id', 'tourBackdrop-temp').removeClass('zindexFix').insertAfter(".tour-highlight-element");
             } 
             if (step.backdropOptions.backdropSibling == false) 
