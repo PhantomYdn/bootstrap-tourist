@@ -75,31 +75,33 @@ If you already have a working tour using Bootstrap Tour, and you want to move to
 
 ## Documentation
 Tourist now has further documentation included in the repo under the `/docs/` folder. Take a look!
+
 **IMPORTANT!** - Steps linked to elements ALWAYS stay stuck to their element, even if the user scrolls the element & tour popover off the screen.
+
 **NOTE** - For [BootstrapDialog plugin](https://nakupanda.github.io/bootstrap3-dialog/), since it creates random UUIDs for the dialog DOM ID. You need to fix the ID to something you know. Do the following:
-    ```js
-    // Setup BoostrapDialog
-    var boostrapDialog = new BootstrapDialog.confirm({
-        ...options
-    });
+```js
+// Setup BoostrapDialog
+var boostrapDialog = new BootstrapDialog.confirm({
+    ...options
+});
 
-    // BootstrapDialog gives a random GUID ID for dialog. Give it a proper one
-    var $modal = boostrapDialog.getModal();
-    $modal.attr('id', 'myModal');
+// BootstrapDialog gives a random GUID ID for dialog. Give it a proper one
+var $modal = boostrapDialog.getModal();
+$modal.attr('id', 'myModal');
 
-    boostrapDialog.setId('myModal');
+boostrapDialog.setId('myModal');
 
-    // Now use `myModal` element in a tour step
-    var tour = new Tour({
-        steps: [
-            {
-                element: '#myModal'
-            }
-        ]
-    });
+// Now use `myModal` element in a tour step
+var tour = new Tour({
+    steps: [
+        {
+            element: '#myModal'
+        }
+    ]
+});
 
-    tour.start();
-    ```
+tour.start();
+```
 
 ### Global Options
 
@@ -110,7 +112,9 @@ var tour = new Tour({
     framework: 'bootstrap3' // or "bootstrap4" depending on your version of bootstrap
 });
 ```
+
 **IMPORTANT!** - Only `bootstrap3` and `bootstrap4` are valid options by default
+
 **NOTE** - To add additional custom framework templates, search the code for `PLACEHOLDER: TEMPLATES LOCATION`. There is an array that contains the templates, simply edit or add as required.
 
 #### `template`
@@ -120,6 +124,7 @@ var tour = new Tour({
     template: '<div class="popover" role="tooltip">....blah....</div>'
 });
 ```
+
 **NOTE** - If not specified, or when set to `null`, Tourist uses the `framework`'s default popover template
 
 #### `onPreviouslyEnded()`
@@ -158,20 +163,21 @@ var tour = new Tour({
     }
 });
 ```
+
 **IMPORTANT!** - Specifying a function for this option will cause `sanitizeWhitelist` to be ignored. However, specifying anything other than a function will cause `sanitizeWhitelist` to be used.
+
 **NOTE** - If you have complete control over the tour content (ie. no risk of XSS or similar attacks), you can use `sanitizeFunction` to bypass all sanitization and use your step content exactly as is by simply returning the content:
-    ```js
-    var tour = new Tour({
-        sanitizeFunction: function (stepContent) {
-            // POTENTIAL SECURITY RISK
-            // bypass Bootstrap sanitizer, perform no sanitization, tour step content will be exactly as templated in tourSteps.
-            return stepContent;
-        }
-    });
-    ```
+```js
+var tour = new Tour({
+    sanitizeFunction: function (stepContent) {
+        // POTENTIAL SECURITY RISK
+        // bypass Bootstrap sanitizer, perform no sanitization, tour step content will be exactly as templated in tourSteps.
+        return stepContent;
+    }
+});
+```
 
 #### `localization`
-
 
 ##### `buttonTexts`
 Change the text displayed for the buttons used in the tour step popovers
@@ -214,73 +220,74 @@ var tour = new Tour({
 
 ##### `animation`
 The animations that happen between different states, for all of the following sub-options, either a function, or a CSS class string can be specified.
-**NOTE** - When providing a CSS class, this class will be applied to the backdrop/highlight element at the specified time and removed once the transition is complete.
-    For example, assume you create a class in your CSS that animates an effect as follows:
-        ```css
-        .my-custom-animation {
-            -webkit-transition: all .5s ease-out;
-            -moz-transition: all .5s ease-out;
-            -ms-transition: all .5s ease-out;
-            -o-transition: all .5s ease-out;
-            transition: all .5s ease-out;
-        }
-        ```
-    You can then use this effect every time the background overlay div is shown by specifying it as follows:
-        ```js
-        var tour = new Tour({
-            backdropOptions: {
-                animation: {
-                    backdropShow: "my-custom-animation"
-                }
-            }
-        });
-        ```
-    Now, when moving between a step without a backdrop to one that has a backdrop, your class will be used to implement the transition, in the following manner:
-        - The class will be added before the backdrop is shown and removed when the transition is complete.
-    In other words, specifying a CSS class for `backdropShow` is functionally equivalent to the following code executed when the tour moves between steps:
-        ```js
-        $(backdropOptions element).addClass("my-custom-animation");
-        $(backdropOptions element).show(0, function() {
-            $(this).removeClass("my-custom-animation");
-        });
-        ```
-    **IMPORTANT!** - The CSS class is removed after the transition is complete, therefore only use this to apply CSS transitions - do not use it for "persistent" CSS changes
-**NOTE** - When providing a function, it must position and show the highlight/backdrop element, and must have the following signature `function (domElement, step)`.
-    The `domElement` parameter provides a jQuery object for the element you must manipulate.
-        - For example, if you have specified a function for `backdropOptions.animation.highlightShow`, then domElement will be the highlighting div. You must then correctly position and show this div over the step element.
-    The `step` parameter provides an object with information about the step. It has the following props, most of which are taken from your tour step and re-provided to you for ease:
-        ```js
-        step = {
-            element,                // the actual step element, even if the tour uses a function for this step.element option
-            container,              // the container option (string) as specified in the step or globally, to help you decide how to set up the transition
-            backdrop,               // as per step option (bool)
-            preventInteraction,     // as per step option (bool)
-            isOrphan,               // whether is step is actually an orphan, because the element was wrong and showIfUnintendedOrphan == true or for some other reason (bool)
-            orphan,                 // as per step option (bool)
-            showIfUnintendedOrphan, // as per step option (bool)
-            duration,               // as per step option (bool)
-            delay,                  // as per step option (bool)
-            fnPositionHighlight     // a helper function to position the highlight element (SEE BELOW FOR MORE INFO)
-        };
-        ```
-        - The step parameter's `fnPositionHighlight` option is provided to make it easy for you to automatically position the highlight div on top of the tour step element.
-            - The function simply performs the following:
-                ```js
-                function fnPositionHighlight() {
-                    $(DOMID_HIGHLIGHT).width(_stepElement.outerWidth())
-                        .height(_stepElement.outerHeight())
-                        .offset(_stepElement.offset());
-                }
-                ```
-            - This allows you to do the following in your customized transition code:
-                ```js
-                function (domElement, step) {
-                    // do whatever setup for your custom transition
-                    step.fnPositionHighlight();
-                }
-                ```
 
-    **IMPORTANT!** - The provided function is 100% responsible for both positioning AND showing the highlight/backdrop element
+**NOTE** - When providing a CSS class, this class will be applied to the backdrop/highlight element at the specified time and removed once the transition is complete.
+- For example, assume you create a class in your CSS that animates an effect as follows:
+```css
+.my-custom-animation {
+    -webkit-transition: all .5s ease-out;
+    -moz-transition: all .5s ease-out;
+    -ms-transition: all .5s ease-out;
+    -o-transition: all .5s ease-out;
+    transition: all .5s ease-out;
+}
+```
+- You can then use this effect every time the background overlay div is shown by specifying it as follows:
+```js
+var tour = new Tour({
+    backdropOptions: {
+        animation: {
+            backdropShow: "my-custom-animation"
+        }
+    }
+});
+```
+- Now, when moving between a step without a backdrop to one that has a backdrop, your class will be used to implement the transition, in the following manner:
+    - The class will be added before the backdrop is shown and removed when the transition is complete.
+- In other words, specifying a CSS class for `backdropShow` is functionally equivalent to the following code executed when the tour moves between steps:
+```js
+$(backdropOptions element).addClass("my-custom-animation");
+$(backdropOptions element).show(0, function() {
+    $(this).removeClass("my-custom-animation");
+});
+```
+- **IMPORTANT!** - The CSS class is removed after the transition is complete, therefore only use this to apply CSS transitions - do not use it for "persistent" CSS changes
+
+**NOTE** - When providing a function, it must position and show the highlight/backdrop element, and must have the following signature `function (domElement, step)`.
+- The `domElement` parameter provides a jQuery object for the element you must manipulate.
+    - For example, if you have specified a function for `backdropOptions.animation.highlightShow`, then domElement will be the highlighting div. You must then correctly position and show this div over the step element.
+- The `step` parameter provides an object with information about the step. It has the following props, most of which are taken from your tour step and re-provided to you for ease:
+```js
+step = {
+    element,                // the actual step element, even if the tour uses a function for this step.element option
+    container,              // the container option (string) as specified in the step or globally, to help you decide how to set up the transition
+    backdrop,               // as per step option (bool)
+    preventInteraction,     // as per step option (bool)
+    isOrphan,               // whether is step is actually an orphan, because the element was wrong and showIfUnintendedOrphan == true or for some other reason (bool)
+    orphan,                 // as per step option (bool)
+    showIfUnintendedOrphan, // as per step option (bool)
+    duration,               // as per step option (bool)
+    delay,                  // as per step option (bool)
+    fnPositionHighlight     // a helper function to position the highlight element (SEE BELOW FOR MORE INFO)
+};
+```
+- The step parameter's `fnPositionHighlight` option is provided to make it easy for you to automatically position the highlight div on top of the tour step element.
+    - The function simply performs the following:
+    ```js
+    function fnPositionHighlight() {
+        $(DOMID_HIGHLIGHT).width(_stepElement.outerWidth())
+            .height(_stepElement.outerHeight())
+            .offset(_stepElement.offset());
+    }
+    ```
+    - This allows you to do the following in your customized transition code:
+    ```js
+    function (domElement, step) {
+        // do whatever setup for your custom transition
+        step.fnPositionHighlight();
+    }
+    ```
+- **IMPORTANT!** - The provided function is 100% responsible for both positioning AND showing the highlight/backdrop element
 
 ###### `backdropShow`
 Animation for when a previously hidden backdrop is shown (DEFAULT shown below)
@@ -353,6 +360,7 @@ var tour = new Tour({
     }
 });
 ```
+
 **IMPORTANT!** - This option only applies to the default templates
 
 ### Per-step options
@@ -547,6 +555,7 @@ var tour = new Tour({
     }
 });
 ```
+
 **IMPORTANT!** - orphan steps are stuck to the center of the screen
 
 #### `showIfUnintendedOrphan`
@@ -587,6 +596,7 @@ var tour = new Tour({
     showIfUnintendedOrphan: true
 });
 ```
+
 **IMPORTANT!** - `delayOnElement` takes priority over this option, so the delay will timeout before the step will be shown as an orphan.
 
 #### `onModalHidden`
@@ -613,7 +623,9 @@ var tour = new Tour({
     }
 });
 ```
+
 **IMPORTANT!** - Only works when step is not orphaned
+
 **NOTE** - Different return values will cause different actions:
     - `int` step number to immediately move to that step
     - `false` to stay on the current step
@@ -675,10 +687,8 @@ const tour = new Tour({
     }
 });
 ```
-```
 
-### All options
-With defaults
+### All options (with default values)
 
 ```js
 var tour = new Tour({
