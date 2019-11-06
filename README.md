@@ -1,4 +1,4 @@
-# Bootstrap Tourist [![NPM Version](http://img.shields.io/npm/v/bootstrap-tourist.svg?style=flat)](https://www.npmjs.org/)
+# Bootstrap Tourist [![NPM Version](http://img.shields.io/npm/v/bootstrap-tourist.svg?style=flat)](https://www.npmjs.org/) ![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 Quick and easy way to build your product tours with Bootstrap Popovers for Bootstrap 3 and 4.
 
