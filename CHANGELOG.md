@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html)..
 
 ## [Unreleased]
 
@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.3.0]
 
 ### Added
- - Added `showIfUnintendedOrphan` to show a tour step as an orphan if its element doesn't exist, overriding `onElementUnavailable`
+ - Added `showIfUnintendedOrphan` to show a tour step as an orphan if its element doesn't exist, overriding `onElementUnavailable` (thanks to [@diesl](https://github.com/diesl))
 
 ### Changed
  - New method of backdrop and highlight added, with major effort and code from [@ibastevan](https://github.com/ibastevan):
@@ -48,7 +48,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.0.10-beta]:
 
 ### Added
- - added support for changing button texts (thanks to [@vneri](https://github.com/vneri))
+ - added support for changing button texts (thanks to [@vneri](https://github.com/vneri) (https://github.com/IGreatlyDislikeJavascript/bootstrap-tourist/pull/8) for the original change)
+
+### Deprecated
  - added dummy `init()` to support drop-in replacement for Tour (thanks to [@pau1phi11ips](https://github.com/pau1phi11ips))
 
 ## 0.0.9-beta:
@@ -77,12 +79,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 0.0.7-beta:
 
 ### Fixed
- - Fix breaking change in Bootstrap 3.4.1, fixes this issue: https://github.com/sorich87/bootstrap-tour/issues/723#issuecomment-471107788. Issue is caused by the BS sanitizer, to avoid this reoccurring the "sanitizeWhitelist:" and "sanitizeFunction:" global options added
+ - Fix breaking change in Bootstrap 3.4.1, fixes this issue: https://github.com/sorich87/bootstrap-tour/issues/723#issuecomment-471107788.
+    - Issue is caused by the BS sanitizer, to avoid this reoccurring the `sanitizeWhitelist` and `sanitizeFunction()` global options were added
+    - See https://getbootstrap.com/docs/3.4/javascript/#js-sanitizer and https://blog.getbootstrap.com/2019/02/13/bootstrap-4-3-1-and-3-4-1/
 
 ## 0.0.6-beta:
 
 ### Added
  - Added `onPreviouslyEnded()` callback: https://github.com/sorich87/bootstrap-tour/issues/720
+    - Original behavior for a tour that had previously ended was to call `onStart()` callback, and then abort without calling `onEnd()`. This has been altered so that calling `tour.start()` on a tour that has previously ended (cookie step set to end, etc.) will now **ONLY** call `onPreviouslyEnded()`
+    - This restores the functionality that allows app JS to simply call tour.start() on page load, and the Tour will now only call `onStart()` / `onEnd()` when
+    the tour really is started or ended.
  - Added selector to switch between bootstrap3 and bootstrap4 or custom template, thanks to: https://github.com/sorich87/bootstrap-tour/pull/643
 
 ### Fixed
@@ -91,7 +98,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## 0.0.5-beta:
 
 ### Added
- - Added "unfix" for bootstrap selectpicker to revert zindex after step that includes this plugin
+ - Added "unfix" for [Bootstrap Select](https://github.com/snapappointments/bootstrap-select/) to revert zindex after step that includes this plugin
 
 ### Changed
  - Improved the background overlay and scroll handling, unnecessary work removed
