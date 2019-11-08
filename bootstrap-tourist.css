@@ -33,6 +33,7 @@
   transition: all .3s ease-out;
 }
 
+
 .tour-prevent {
   position: absolute;
   z-index: 1112;
@@ -93,4 +94,12 @@
 
 .popover[class*="tour-"].orphan .arrow {
 	display: none;
+}
+
+.behind {
+    z-index: -1;
+}
+
+.zindexFix {
+    z-index: 1029;
 }

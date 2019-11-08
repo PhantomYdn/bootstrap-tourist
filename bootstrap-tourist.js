@@ -114,6 +114,7 @@
 										backdropOptions:	{
 																highlightOpacity:			0.9,
 																highlightColor:				"#FFF",
+                                                                backdropSibling:            false,
 																animation:	{
 																				// can be string of css class or function signature: function(domElement, step) {}
 																				backdropShow:			function(domElement, step)
@@ -123,7 +124,7 @@
 																				backdropHide:			function(domElement, step)
 																										{
 																											domElement.fadeOut("slow")
-																										},
+																										},                                                                                
 																				highlightShow:			function(domElement, step)
 																										{
 																											// calling step.fnPositionHighlight() is the same as:
@@ -1848,6 +1849,9 @@
 			{
 				$(DOMID_BACKDROP).hide(0);
 				$(DOMID_HIGHLIGHT).hide(0);
+                $("#tourBackdrop-temp").remove();
+                $("#tourHighlight-temp").remove();
+
 			}
         };
 
@@ -2136,6 +2140,22 @@
 					}
 				}
 			}
+
+            if (step.backdropOptions.backdropSibling == true) 
+            {
+                $(DOMID_HIGHLIGHT).addClass('behind');
+                $(DOMID_BACKDROP).addClass('zindexFix');
+                $(DOMID_HIGHLIGHT).clone().prop('id', 'tourHighlight-temp').removeClass('behind').insertAfter(".tour-highlight-element");
+                $(DOMID_BACKDROP).clone().prop('id', 'tourBackdrop-temp').removeClass('zindexFix').insertAfter(".tour-highlight-element");
+            } 
+            if (step.backdropOptions.backdropSibling == false) 
+            {
+                $(DOMID_HIGHLIGHT).removeClass('behind');
+                $(DOMID_BACKDROP).removeClass('zindexFix');
+                $('#tourBackdrop-temp').remove();
+                $('#tourHighlight-temp').remove();
+            }
+
         };
 
 		// Updates visibility of the preventInteraction div and any other overlay elements added in future features
